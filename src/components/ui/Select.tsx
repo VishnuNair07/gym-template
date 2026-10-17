@@ -1,4 +1,4 @@
-import { type SelectHTMLAttributes, forwardRef } from "react";
+import { type SelectHTMLAttributes, forwardRef, type ReactNode } from "react";
 import { ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils/cn";
 
@@ -6,12 +6,13 @@ export type SelectOption = { label: string; value: string };
 
 export type SelectProps = SelectHTMLAttributes<HTMLSelectElement> & {
   invalid?: boolean;
-  options: SelectOption[];
+  options?: SelectOption[];
   placeholder?: string;
+  children?: ReactNode;
 };
 
 export const Select = forwardRef<HTMLSelectElement, SelectProps>(
-  ({ invalid, options, placeholder, className, disabled, ...props }, ref) => {
+  ({ invalid, options, placeholder, className, disabled, children, ...props }, ref) => {
     return (
       <div className="relative w-full">
         <select
@@ -34,11 +35,14 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
             </option>
           )}
 
-          {options.map((opt) => (
-            <option key={opt.value} value={opt.value}>
-              {opt.label}
-            </option>
-          ))}
+          {children}
+
+          {options &&
+            options.map((opt) => (
+              <option key={opt.value} value={opt.value}>
+                {opt.label}
+              </option>
+            ))}
         </select>
 
         <ChevronDown

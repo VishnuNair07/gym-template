@@ -11,7 +11,7 @@ export function Table({ className, children, ...props }: HTMLAttributes<HTMLTabl
   );
 }
 
-export function TableHead({ className, children, ...props }: HTMLAttributes<HTMLTableSectionElement>) {
+export function TableHeader({ className, children, ...props }: HTMLAttributes<HTMLTableSectionElement>) {
   return (
     <thead
       className={cn(
@@ -24,6 +24,22 @@ export function TableHead({ className, children, ...props }: HTMLAttributes<HTML
     </thead>
   );
 }
+
+export function TableHead({ className, children, ...props }: ThHTMLAttributes<HTMLTableCellElement>) {
+  return (
+    <th
+      className={cn(
+        "border-b border-border bg-surface-secondary px-4 py-3.5 font-medium",
+        className
+      )}
+      {...props}
+    >
+      {children}
+    </th>
+  );
+}
+
+export const TableHeaderCell = TableHead;
 
 export function TableBody({ className, children, ...props }: HTMLAttributes<HTMLTableSectionElement>) {
   return (
@@ -58,19 +74,5 @@ export function TableCell({ className, children, ...props }: TdHTMLAttributes<HT
     >
       {children}
     </td>
-  );
-}
-
-export function TableHeaderCell({ className, children, ...props }: ThHTMLAttributes<HTMLTableCellElement>) {
-  return (
-    <th
-      className={cn(
-        "border-b border-border bg-surface-secondary px-4 py-3.5 font-medium",
-        className
-      )}
-      {...props}
-    >
-      {children}
-    </th>
   );
 }
