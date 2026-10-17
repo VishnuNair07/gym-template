@@ -19,18 +19,18 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
           ref={ref}
           disabled={disabled}
           className={cn(
-            "h-11 w-full appearance-none rounded-xl border bg-background pl-3 pr-10 text-sm font-medium text-text-primary shadow-sm outline-none transition-all duration-200",
-            "placeholder:text-text-muted",
+            "h-10 w-full appearance-none rounded-lg border bg-surface pl-3 pr-9 text-sm font-medium text-text-primary outline-none transition-all duration-150",
+            "placeholder:text-text-muted/60",
             invalid
-              ? "border-danger bg-danger/5 focus:border-danger focus:ring-4 focus:ring-danger/10"
-              : "border-border hover:border-border-strong focus:border-primary focus:ring-4 focus:ring-primary/10",
-            disabled && "cursor-not-allowed border-border bg-surface text-text-muted opacity-70",
+              ? "border-danger ring-2 ring-danger/10 focus:border-danger focus:ring-2 focus:ring-danger/20"
+              : "border-border/80 shadow-2xs hover:border-border-strong focus:border-primary focus:ring-2 focus:ring-primary/20 focus:shadow-xs",
+            disabled && "cursor-not-allowed opacity-60 bg-surface-secondary/60 hover:border-border/80",
             className
           )}
           {...props}
         >
           {placeholder && (
-            <option value="" disabled hidden>
+            <option value="" disabled hidden className="bg-surface text-text-muted">
               {placeholder}
             </option>
           )}
@@ -39,7 +39,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
 
           {options &&
             options.map((opt) => (
-              <option key={opt.value} value={opt.value}>
+              <option key={opt.value} value={opt.value} className="bg-surface text-text-primary">
                 {opt.label}
               </option>
             ))}
@@ -47,8 +47,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
 
         <ChevronDown
           className={cn(
-            "pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 transition-colors",
-            disabled ? "text-text-muted" : "text-text-secondary"
+            "pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 transition-colors text-text-muted"
           )}
         />
       </div>

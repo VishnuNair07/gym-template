@@ -29,7 +29,7 @@ export function TableHead({ className, children, ...props }: ThHTMLAttributes<HT
   return (
     <th
       className={cn(
-        "border-b border-border bg-surface-secondary px-4 py-3.5 font-medium",
+        "border-b border-border/60 bg-surface-secondary/80 px-4 py-3 text-xs font-bold uppercase tracking-wider text-text-muted",
         className
       )}
       {...props}
@@ -43,7 +43,7 @@ export const TableHeaderCell = TableHead;
 
 export function TableBody({ className, children, ...props }: HTMLAttributes<HTMLTableSectionElement>) {
   return (
-    <tbody className={cn("divide-y divide-border", className)} {...props}>
+    <tbody className={cn("divide-y divide-border/40", className)} {...props}>
       {children}
     </tbody>
   );
@@ -53,7 +53,7 @@ export function TableRow({ className, children, ...props }: HTMLAttributes<HTMLT
   return (
     <tr
       className={cn(
-        "transition-colors hover:bg-surface/70",
+        "transition-colors hover:bg-surface-secondary/40",
         className
       )}
       {...props}
@@ -67,7 +67,7 @@ export function TableCell({ className, children, ...props }: TdHTMLAttributes<HT
   return (
     <td
       className={cn(
-        "border-b border-border px-4 py-3.5 align-middle text-text-primary",
+        "px-4 py-3.5 align-middle text-sm text-text-primary",
         className
       )}
       {...props}

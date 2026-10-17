@@ -21,14 +21,14 @@ export function FormField({
   return (
     <div className={cn("flex flex-col gap-1.5", className)}>
       {label && (
-        <label className="text-sm font-medium text-text-primary">
+        <label className="text-xs font-bold uppercase tracking-wider text-text-secondary">
           {label}
-          {required && <span className="ml-0.5 text-danger">*</span>}
+          {required && <span className="ml-1 text-danger font-bold">*</span>}
         </label>
       )}
       {children}
       {error ? (
-        <p className="text-sm text-danger">{error}</p>
+        <p className="text-xs font-semibold text-danger flex items-center gap-1">{error}</p>
       ) : (
         helper && <p className="text-xs text-text-muted">{helper}</p>
       )}

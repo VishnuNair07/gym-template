@@ -6,34 +6,43 @@
   --font-urbanist: "Urbanist", "Urbanist Fallback", sans-serif;
   color-scheme: light;
 
-  --app-primary: #4f46e5;
-  --app-primary-hover: #4338ca;
+  /* Brand / Primary — Electric Mint & Emerald (different from navy in screenshot) */
+  --app-primary: #059669;
+  --app-primary-hover: #047857;
   --app-primary-foreground: #ffffff;
-  --app-primary-subtle: #eef2ff;
+  --app-primary-subtle: #ecfdf5;
 
-  --app-success: #059669;
-  --app-success-subtle: #ecfdf5;
-  --app-danger: #e11d48;
-  --app-danger-subtle: #fff1f2;
-  --app-warning: #b45309;
-  --app-warning-subtle: #fffbeb;
-  --app-info: #0284c7;
-  --app-info-subtle: #f0f9ff;
+  --app-success: #10b981;
+  --app-success-subtle: #d1fae5;
+  --app-danger: #f43f5e;
+  --app-danger-subtle: #ffe4e6;
+  --app-warning: #f59e0b;
+  --app-warning-subtle: #fef3c7;
+  --app-info: #06b6d4;
+  --app-info-subtle: #e0f2fe;
 
-  --app-background: #f8fafc;
+  /* Dedicated Dark Shell for Sidebar & Topbar matching screenshot style */
+  --shell-bg: #070d18;
+  --shell-border: #131c2e;
+  --shell-text: #8899b5;
+  --shell-text-active: #ffffff;
+  --shell-active-bg: #141f35;
+
+  /* Surface / Layout */
+  --app-background: #f1f5f9;
   --app-surface: #ffffff;
-  --app-surface-secondary: #f1f5f9;
-  --app-border: #e2e8f0;
-  --app-border-strong: #cbd5e1;
+  --app-surface-secondary: #f8fafc;
+  --app-border: #cbd5e1;
+  --app-border-strong: #94a3b8;
 
   --app-text-primary: #0f172a;
   --app-text-secondary: #475569;
   --app-text-muted: #64748b;
   --app-text-disabled: #94a3b8;
 
-  --app-shadow-sm: 0 1px 2px rgb(15 23 42 / 0.04);
-  --app-shadow-md: 0 4px 12px rgb(15 23 42 / 0.05);
-  --app-shadow-lg: 0 12px 30px rgb(15 23 42 / 0.08);
+  --app-shadow-sm: 0 1px 3px rgb(15 23 42 / 0.06);
+  --app-shadow-md: 0 4px 14px rgb(15 23 42 / 0.08);
+  --app-shadow-lg: 0 12px 30px rgb(15 23 42 / 0.12);
 
   --app-radius-sm: 0.375rem;
   --app-radius-md: 0.5rem;
@@ -44,30 +53,36 @@
 .dark {
   color-scheme: dark;
 
-  --app-primary: #818cf8;
-  --app-primary-hover: #a5b4fc;
-  --app-primary-foreground: #0b1020;
-  --app-primary-subtle: rgb(99 102 241 / 0.14);
+  --app-primary: #10b981;
+  --app-primary-hover: #34d399;
+  --app-primary-foreground: #042f2e;
+  --app-primary-subtle: rgba(16, 185, 129, 0.15);
 
   --app-success: #34d399;
-  --app-success-subtle: rgb(16 185 129 / 0.12);
+  --app-success-subtle: rgba(52, 211, 153, 0.12);
   --app-danger: #fb7185;
-  --app-danger-subtle: rgb(244 63 94 / 0.12);
+  --app-danger-subtle: rgba(251, 113, 133, 0.12);
   --app-warning: #fbbf24;
-  --app-warning-subtle: rgb(245 158 11 / 0.12);
-  --app-info: #38bdf8;
-  --app-info-subtle: rgb(56 189 248 / 0.12);
+  --app-warning-subtle: rgba(251, 191, 36, 0.12);
+  --app-info: #22d3ee;
+  --app-info-subtle: rgba(34, 211, 238, 0.12);
 
-  --app-background: #090b10;
-  --app-surface: #10131a;
-  --app-surface-secondary: #161a23;
-  --app-border: #252a35;
-  --app-border-strong: #343b49;
+  --shell-bg: #070d18;
+  --shell-border: #131c2e;
+  --shell-text: #8899b5;
+  --shell-text-active: #ffffff;
+  --shell-active-bg: #141f35;
 
-  --app-text-primary: #f1f5f9;
-  --app-text-secondary: #a1aaba;
-  --app-text-muted: #737f92;
-  --app-text-disabled: #465064;
+  --app-background: #090c14;
+  --app-surface: #0e1320;
+  --app-surface-secondary: #141a2b;
+  --app-border: #1b2438;
+  --app-border-strong: #283652;
+
+  --app-text-primary: #f8fafc;
+  --app-text-secondary: #94a3b8;
+  --app-text-muted: #64748b;
+  --app-text-disabled: #334155;
 
   --app-shadow-sm: 0 1px 2px rgb(0 0 0 / 0.22);
   --app-shadow-md: 0 4px 12px rgb(0 0 0 / 0.16);
@@ -98,6 +113,12 @@
   --color-surface-secondary: var(--app-surface-secondary);
   --color-border: var(--app-border);
   --color-border-strong: var(--app-border-strong);
+
+  --color-shell-bg: var(--shell-bg);
+  --color-shell-border: var(--shell-border);
+  --color-shell-text: var(--shell-text);
+  --color-shell-text-active: var(--shell-text-active);
+  --color-shell-active-bg: var(--shell-active-bg);
 
   --color-text-primary: var(--app-text-primary);
   --color-text-secondary: var(--app-text-secondary);
@@ -147,12 +168,18 @@ textarea {
 }
 
 button:focus-visible,
-a:focus-visible,
-input:focus-visible,
-select:focus-visible,
-textarea:focus-visible {
+a:focus-visible {
   outline: 2px solid var(--app-primary);
   outline-offset: 2px;
+}
+
+input:focus,
+input:focus-visible,
+select:focus,
+select:focus-visible,
+textarea:focus,
+textarea:focus-visible {
+  outline: none;
 }
 
 ::-webkit-scrollbar {

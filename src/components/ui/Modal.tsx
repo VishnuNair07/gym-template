@@ -52,24 +52,24 @@ export function Modal({
         aria-modal="true"
         aria-label={title}
         className={cn(
-          "relative z-10 flex w-full flex-col overflow-hidden rounded-xl border border-border bg-background shadow-lg",
+          "relative z-10 flex w-full flex-col overflow-hidden rounded-2xl border border-border/80 bg-surface shadow-2xl",
           "max-h-[calc(100vh-2rem)] sm:max-h-[calc(100vh-3rem)]",
           MODAL_SIZE_MAP[size],
           className
         )}
       >
         {title && (
-          <div className="border-b border-border px-6 py-4">
-            <h2 className="text-base font-semibold tracking-tight text-text-primary">{title}</h2>
+          <div className="border-b border-border/50 px-6 py-4.5">
+            <h2 className="text-base font-bold tracking-tight text-text-primary">{title}</h2>
           </div>
         )}
 
-        <div className="overflow-y-auto px-6 py-4 text-sm text-text-secondary">
+        <div className="overflow-y-auto px-6 py-5 text-sm text-text-secondary">
           {children}
         </div>
 
         {footer && (
-          <div className="flex justify-end gap-2 border-t border-border px-6 py-4">
+          <div className="flex justify-end gap-2.5 border-t border-border/50 px-6 py-4">
             {footer}
           </div>
         )}

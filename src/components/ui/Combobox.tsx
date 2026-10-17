@@ -61,22 +61,22 @@ export function Combobox({
         disabled={disabled}
         onClick={() => setOpen((v) => !v)}
         className={cn(
-          "flex h-10 w-full items-center justify-between gap-2 rounded-lg border bg-background px-3 text-sm transition-colors",
+          "flex h-10 w-full items-center justify-between gap-2 rounded-lg border bg-surface px-3 text-sm transition-all duration-150",
           invalid
-            ? "border-danger focus:ring-2 focus:ring-danger/20"
-            : "border-border hover:border-border-strong focus:border-primary focus:ring-2 focus:ring-primary/15",
-          disabled && "cursor-not-allowed opacity-50 bg-surface"
+            ? "border-danger ring-2 ring-danger/10 focus:border-danger focus:ring-2 focus:ring-danger/20"
+            : "border-border/80 shadow-2xs hover:border-border-strong focus:border-primary focus:ring-2 focus:ring-primary/20",
+          disabled && "cursor-not-allowed opacity-60 bg-surface-secondary/60 hover:border-border/80"
         )}
       >
-        <span className={cn("truncate", !selected && "text-text-muted")}>
+        <span className={cn("truncate font-medium text-text-primary", !selected && "text-text-muted/60 font-normal")}>
           {selected ? selected.label : placeholder}
         </span>
         <ChevronsUpDown className="h-4 w-4 shrink-0 text-text-muted" />
       </button>
 
       {open && (
-        <div className="absolute z-50 mt-1 w-full overflow-hidden rounded-lg border border-border bg-background shadow-lg">
-          <div className="flex items-center gap-2 border-b border-border px-3 py-2">
+        <div className="absolute z-50 mt-1.5 w-full overflow-hidden rounded-xl border border-border/80 bg-surface shadow-2xl">
+          <div className="flex items-center gap-2 border-b border-border/50 px-3 py-2">
             <Search className="h-4 w-4 text-text-muted" />
             <input
               autoFocus

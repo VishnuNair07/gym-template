@@ -15,6 +15,10 @@ import {
   CheckCircle2,
   Receipt,
   Dumbbell,
+  Calendar,
+  ChevronDown,
+  ArrowUpRight,
+  Activity,
 } from "lucide-react";
 import { Shell } from "@/components/layout/Shell";
 import { MetricCard } from "@/components/ui/MetricCard";
@@ -211,489 +215,454 @@ export function DashboardView() {
     });
   };
 
-  // Revenue chart mock data
-  const revenueChartData = [
-    { month: "May", rev: 14200, members: 310, height: 60 },
-    { month: "Jun", rev: 15800, members: 335, height: 68 },
-    { month: "Jul", rev: 16400, members: 350, height: 72 },
-    { month: "Aug", rev: 17100, members: 368, height: 78 },
-    { month: "Sep", rev: 18200, members: 382, height: 85 },
-    { month: "Oct (Live)", rev: 19450, members: 395, height: 95 },
+  const tierDistribution = [
+    { name: "Black Elite Tier", pct: 22, color: "bg-primary" },
+    { name: "Gold Premium", pct: 41, color: "bg-cyan-500" },
+    { name: "Standard Monthly", pct: 26, color: "bg-indigo-500" },
+    { name: "Student / Off-Peak", pct: 8, color: "bg-amber-500" },
+    { name: "Day Pass / Trial", pct: 3, color: "bg-rose-500" },
+  ];
+
+  const trainerActivity = [
+    { name: "Marcus Vance", count: 42, pct: 90 },
+    { name: "Elena Rostova", count: 38, pct: 82 },
+    { name: "Sarah Jenkins", count: 29, pct: 64 },
+    { name: "David Kim", count: 24, pct: 52 },
+    { name: "Maya Patel", count: 19, pct: 41 },
   ];
 
   return (
     <Shell>
-      <div className="space-y-6">
-        {/* Page Header */}
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <div className="flex items-center gap-2.5">
-              <h1 className="text-xl font-bold tracking-tight text-text-primary">
-                Gym Operations Dashboard
+      <div className="space-y-5">
+        {/* Top Header Card matching Screenshot Overview */}
+        <div className="rounded-2xl border border-border bg-surface p-5 shadow-xs">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+            <div>
+              <p className="text-[10px] font-bold tracking-[0.14em] text-text-muted uppercase">
+                GYM OPERATIONS PLATFORM OVERVIEW
+              </p>
+              <h1 className="mt-1 text-2xl font-extrabold tracking-tight text-text-primary">
+                Apex Gym Admin Console
               </h1>
-              <Badge variant="success">Live Facility</Badge>
+              <p className="mt-1 text-xs text-text-muted">
+                Downtown Elite Facility · Oct 17, 2026 · 21:58 IST
+              </p>
             </div>
-            <p className="mt-1 text-xs text-text-muted">
-              Real-time member activity, turnstile scans, active revenue, and capacity metrics.
-            </p>
+
+            {/* Alert badge on the top right */}
+            {expiringMembers.length > 0 && (
+              <Link
+                href="/members?filter=expiring"
+                className="inline-flex items-center gap-1.5 rounded-full border border-danger/30 bg-danger/10 px-3.5 py-1 text-xs font-semibold text-danger transition-colors hover:bg-danger/20"
+              >
+                <span className="flex h-2 w-2 rounded-full bg-danger animate-pulse" />
+                <span>{expiringMembers.length} memberships need review</span>
+              </Link>
+            )}
           </div>
 
-          {/* Quick-action buttons */}
-          <div className="flex flex-wrap items-center gap-2">
-            <Button
-              variant="solid"
-              size="sm"
-              onClick={() => setCheckInModalOpen(true)}
-              className="gap-1.5"
-            >
-              <CalendarCheck className="h-3.5 w-3.5" />
-              Quick Check-in
-            </Button>
+          {/* 5-Column Metrics Row with Subtle Hairline Dividers */}
+          <div className="mt-6 grid grid-cols-2 gap-4 border-t border-border/40 pt-5 sm:grid-cols-3 lg:grid-cols-5 divide-y sm:divide-y-0 lg:divide-x divide-border/30">
+            {/* Metric 1 */}
+            <div className="px-2 first:pl-0">
+              <p className="text-[10px] font-bold uppercase tracking-wider text-text-muted">
+                TOTAL MEMBERS
+              </p>
+              <p className="mt-1 text-2xl font-extrabold text-text-primary tabular-nums">
+                {activeMembers.length}
+              </p>
+              <p className="mt-1 text-xs font-semibold text-primary flex items-center gap-1">
+                <span>+21</span>
+                <span className="text-text-muted font-normal">total in system</span>
+              </p>
+            </div>
 
-            <Button
-              variant="line"
-              size="sm"
+            {/* Metric 2 */}
+            <div className="px-2 sm:pl-4 pt-3 sm:pt-0">
+              <p className="text-[10px] font-bold uppercase tracking-wider text-text-muted">
+                CHECK-INS TODAY
+              </p>
+              <p className="mt-1 text-2xl font-extrabold text-text-primary tabular-nums">
+                {todayAttendance.length}
+              </p>
+              <p className="mt-1 text-xs font-semibold text-primary flex items-center gap-1">
+                <span>↗ 24%</span>
+                <span className="text-text-muted font-normal">peak floor occupancy</span>
+              </p>
+            </div>
+
+            {/* Metric 3 */}
+            <div className="px-2 sm:pl-4 pt-3 sm:pt-0">
+              <p className="text-[10px] font-bold uppercase tracking-wider text-text-muted">
+                AVG FITNESS SCORE
+              </p>
+              <p className="mt-1 text-2xl font-extrabold text-text-primary tabular-nums">
+                8.4
+              </p>
+              <p className="mt-1 text-xs font-semibold text-cyan-500 flex items-center gap-1">
+                <span>↗ active</span>
+                <span className="text-text-muted font-normal">member rating</span>
+              </p>
+            </div>
+
+            {/* Metric 4 */}
+            <div className="px-2 sm:pl-4 pt-3 sm:pt-0">
+              <p className="text-[10px] font-bold uppercase tracking-wider text-text-muted">
+                PENDING DUES
+              </p>
+              <p className="mt-1 text-2xl font-extrabold text-danger tabular-nums">
+                {expiringMembers.length}
+              </p>
+              <p className="mt-1 text-xs font-semibold text-danger flex items-center gap-1">
+                <span>! {expiringMembers.length}</span>
+                <span className="text-text-muted font-normal">requires front-desk review</span>
+              </p>
+            </div>
+
+            {/* Metric 5 */}
+            <div className="px-2 sm:pl-4 pt-3 sm:pt-0">
+              <p className="text-[10px] font-bold uppercase tracking-wider text-text-muted">
+                ACTIVE TRAINERS
+              </p>
+              <p className="mt-1 text-2xl font-extrabold text-text-primary tabular-nums">
+                12
+              </p>
+              <p className="mt-1 text-xs font-semibold text-primary flex items-center gap-1">
+                <span>10</span>
+                <span className="text-text-muted font-normal">active on floor now</span>
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Quick Actions Row matching Screenshot */}
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="text-xs font-bold uppercase tracking-wider text-text-muted mr-1">
+              QUICK ACTIONS
+            </span>
+
+            <button
+              type="button"
               onClick={() => setAddMemberModalOpen(true)}
-              className="gap-1.5"
+              className="inline-flex items-center gap-1.5 rounded-lg bg-primary px-3 py-1.5 text-xs font-semibold text-white shadow-xs hover:bg-primary-hover transition-all"
             >
               <UserPlus className="h-3.5 w-3.5" />
-              New Member
-            </Button>
+              <span>Add Member</span>
+            </button>
 
-            <Button
-              variant="line"
-              size="sm"
+            <button
+              type="button"
+              onClick={() => setCheckInModalOpen(true)}
+              className="inline-flex items-center gap-1.5 rounded-lg border border-border/70 bg-surface px-3 py-1.5 text-xs font-semibold text-text-primary shadow-2xs hover:border-primary hover:text-primary hover:bg-surface-secondary/50 transition-all"
+            >
+              <CalendarCheck className="h-3.5 w-3.5" />
+              <span>Quick Check-in</span>
+            </button>
+
+            <button
+              type="button"
               onClick={() => setPaymentModalOpen(true)}
-              className="gap-1.5"
+              className="inline-flex items-center gap-1.5 rounded-lg border border-border/70 bg-surface px-3 py-1.5 text-xs font-semibold text-text-primary shadow-2xs hover:border-primary hover:text-primary hover:bg-surface-secondary/50 transition-all"
             >
               <DollarSign className="h-3.5 w-3.5" />
-              Record Payment
-            </Button>
+              <span>Record Payment</span>
+            </button>
 
             <Link href="/classes">
-              <Button variant="ghost" size="sm" className="gap-1.5">
+              <button
+                type="button"
+                className="inline-flex items-center gap-1.5 rounded-lg border border-border/70 bg-surface px-3 py-1.5 text-xs font-semibold text-text-primary shadow-2xs hover:border-primary hover:text-primary hover:bg-surface-secondary/50 transition-all"
+              >
                 <Dumbbell className="h-3.5 w-3.5" />
-                Classes
-              </Button>
+                <span>Schedule Class</span>
+              </button>
             </Link>
+          </div>
+
+          {/* Date Range Selector */}
+          <div className="inline-flex items-center gap-2 rounded-lg border border-border/70 bg-surface px-3 py-1.5 text-xs font-semibold text-text-secondary self-start sm:self-auto shadow-2xs">
+            <Calendar className="h-3.5 w-3.5 text-text-muted" />
+            <span>Oct 2026</span>
+            <ChevronDown className="h-3 w-3 text-text-muted" />
           </div>
         </div>
 
-        {/* Priority Insight / Tonal Card if there are expiring memberships */}
-        {expiringMembers.length > 0 && (
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between rounded-lg border border-warning/20 bg-warning-subtle/30 px-4 py-3 text-text-primary">
-            <div className="flex items-center gap-3">
-              <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-warning/15 text-warning ring-1 ring-warning/20">
-                <AlertTriangle className="h-3.5 w-3.5" />
+        {/* Analytics Section Title */}
+        <div className="flex items-center justify-between pt-1">
+          <h2 className="text-base font-extrabold tracking-tight text-text-primary">
+            Facility Analytics
+          </h2>
+          <Link
+            href="/reports"
+            className="inline-flex items-center gap-1 text-xs font-bold text-primary hover:underline"
+          >
+            Full report <ArrowUpRight className="h-3.5 w-3.5" />
+          </Link>
+        </div>
+
+        {/* 3 Analytics Cards Grid matching Screenshot */}
+        <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
+          {/* Card 1: Check-in Volume */}
+          <div className="flex flex-col justify-between rounded-2xl border border-border bg-surface p-5 shadow-xs">
+            <div>
+              <div className="flex items-start justify-between">
+                <div className="flex items-center gap-2.5">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-surface-secondary text-primary">
+                    <TrendingUp className="h-4 w-4" />
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-bold text-text-primary">Check-in Volume</h3>
+                    <p className="text-[11px] text-text-muted">Daily volume · last 7 days</p>
+                  </div>
+                </div>
+
+                <div className="inline-flex items-center gap-1 rounded-md border border-border bg-surface px-2 py-1 text-[11px] font-semibold text-text-secondary">
+                  <span>7 days</span>
+                  <ChevronDown className="h-3 w-3 text-text-muted" />
+                </div>
               </div>
-              <div>
-                <p className="text-xs font-semibold text-text-primary">
-                  {expiringMembers.length} Memberships expiring within 30 days
-                </p>
-                <p className="text-[11px] text-text-muted">
-                  Send renewal reminders or extend membership passes to prevent churn.
-                </p>
+
+              {/* Curved SVG Area/Line Chart */}
+              <div className="mt-5 w-full">
+                <svg viewBox="0 0 320 90" className="w-full h-24 overflow-visible">
+                  <defs>
+                    <linearGradient id="gymChartGrad" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor="var(--app-primary)" stopOpacity="0.28" />
+                      <stop offset="100%" stopColor="var(--app-primary)" stopOpacity="0.0" />
+                    </linearGradient>
+                  </defs>
+                  <path
+                    d="M 0 55 C 35 45, 65 22, 105 34 C 145 46, 185 70, 225 78 C 265 86, 295 90, 320 84 L 320 90 L 0 90 Z"
+                    fill="url(#gymChartGrad)"
+                  />
+                  <path
+                    d="M 0 55 C 35 45, 65 22, 105 34 C 145 46, 185 70, 225 78 C 265 86, 295 90, 320 84"
+                    fill="none"
+                    stroke="var(--app-primary)"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                  />
+                </svg>
               </div>
             </div>
-            <Link href="/members?filter=expiring">
-              <Button variant="line" size="sm" className="text-xs shrink-0 self-start sm:self-auto border-warning/30 hover:bg-warning/10">
-                Review Renewals
-              </Button>
-            </Link>
+
+            {/* Bottom 3 Summary Stats with Subtle Vertical Dividers */}
+            <div className="mt-4 grid grid-cols-3 border-t border-border/40 pt-4 text-center divide-x divide-border/30">
+              <div>
+                <p className="text-[10px] font-bold uppercase tracking-wider text-text-muted">TODAY</p>
+                <p className="mt-0.5 text-base font-extrabold text-text-primary tabular-nums">47</p>
+              </div>
+              <div>
+                <p className="text-[10px] font-bold uppercase tracking-wider text-text-muted">PEAK (FRI)</p>
+                <p className="mt-0.5 text-base font-extrabold text-text-primary tabular-nums">58</p>
+              </div>
+              <div>
+                <p className="text-[10px] font-bold uppercase tracking-wider text-text-muted">7D AVG</p>
+                <p className="mt-0.5 text-base font-extrabold text-text-primary tabular-nums">41</p>
+              </div>
+            </div>
           </div>
-        )}
 
-        {/* KPI Grid */}
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 2xl:grid-cols-4">
-          <MetricCard
-            title="Total Active Members"
-            value={activeMembers.length}
-            icon={<Users className="h-5 w-5" />}
-            accentColor="primary"
-            delta={{ value: "+12.4%", positive: true, label: "vs last month" }}
-            meta={[
-              { label: "New this week", value: "8 members" },
-              { label: "Frozen accounts", value: `${members.filter((m) => m.status === "Frozen").length}` },
-            ]}
-          />
+          {/* Card 2: Membership Tier Distribution */}
+          <div className="flex flex-col justify-between rounded-2xl border border-border bg-surface p-5 shadow-xs">
+            <div>
+              <div className="flex items-center gap-2.5">
+                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-surface-secondary text-primary">
+                  <Activity className="h-4 w-4" />
+                </div>
+                <div>
+                  <h3 className="text-sm font-bold text-text-primary">Score Distribution</h3>
+                  <p className="text-[11px] text-text-muted">All completed interviews / tiers</p>
+                </div>
+              </div>
 
-          <MetricCard
-            title="Monthly Revenue"
-            value={`$${totalRevenue.toLocaleString()}`}
-            icon={<DollarSign className="h-5 w-5" />}
-            accentColor="success"
-            delta={{ value: "+8.5%", positive: true, label: "vs target" }}
-            meta={[
-              { label: "Avg Membership", value: "$68.50" },
-              { label: "Pending Dues", value: "$49.00" },
-            ]}
-          />
+              {/* Stacked colored horizontal bars */}
+              <div className="mt-4 space-y-2.5">
+                {tierDistribution.map((tier) => (
+                  <div key={tier.name} className="flex items-center gap-3 text-xs">
+                    <span className="w-28 shrink-0 truncate text-text-secondary text-[11px]">
+                      {tier.name}
+                    </span>
+                    <div className="flex-1 h-2 rounded-full bg-surface-secondary overflow-hidden">
+                      <div
+                        style={{ width: `${tier.pct}%` }}
+                        className={`h-full rounded-full ${tier.color}`}
+                      />
+                    </div>
+                    <span className="w-8 shrink-0 text-right font-mono text-[11px] font-bold text-text-muted tabular-nums">
+                      {tier.pct}%
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
 
-          <MetricCard
-            title="Today's Check-ins"
-            value={todayAttendance.length}
-            icon={<CalendarCheck className="h-5 w-5" />}
-            accentColor="info"
-            delta={{ value: "+18%", positive: true, label: "peak hour pace" }}
-            meta={[
-              { label: "Currently on floor", value: `${currentlyInGym.length} members` },
-              { label: "Avg workout time", value: "68 min" },
-            ]}
-          />
+            {/* Insight Block */}
+            <div className="mt-4 border-t border-border/40 pt-3">
+              <p className="text-[10px] font-bold tracking-wider uppercase text-text-muted">INSIGHT</p>
+              <p className="mt-0.5 text-xs text-text-secondary leading-snug">
+                63% of active members maintain recurring annual or elite tier subscriptions.
+              </p>
+            </div>
+          </div>
 
-          <MetricCard
-            title="Active Classes Today"
-            value={classes.length}
-            icon={<Dumbbell className="h-5 w-5" />}
-            accentColor="warning"
-            delta={{ value: "88%", positive: true, label: "avg capacity fill" }}
-            meta={[
-              { label: "Total slots", value: "82 slots" },
-              { label: "Waitlisted", value: "4 members" },
-            ]}
-          />
+          {/* Card 3: Trainer Activity */}
+          <div className="flex flex-col justify-between rounded-2xl border border-border bg-surface p-5 shadow-xs">
+            <div>
+              <div className="flex items-center gap-2.5">
+                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-surface-secondary text-primary">
+                  <Users className="h-4 w-4" />
+                </div>
+                <div>
+                  <h3 className="text-sm font-bold text-text-primary">Recruiter / Trainer Activity</h3>
+                  <p className="text-[11px] text-text-muted">Candidates / sessions added · this week</p>
+                </div>
+              </div>
+
+              {/* Ranked dark horizontal bars with name on left and count on right */}
+              <div className="mt-4 space-y-2.5">
+                {trainerActivity.map((coach) => (
+                  <div key={coach.name} className="flex items-center gap-3 text-xs">
+                    <span className="w-24 shrink-0 truncate text-text-secondary font-medium text-[11px]">
+                      {coach.name}
+                    </span>
+                    <div className="flex-1 h-2.5 rounded-full bg-surface-secondary overflow-hidden">
+                      <div
+                        style={{ width: `${coach.pct}%` }}
+                        className="h-full rounded-full bg-text-primary"
+                      />
+                    </div>
+                    <span className="w-6 shrink-0 text-right font-mono text-[11px] font-bold text-text-primary tabular-nums">
+                      {coach.count}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Total Block */}
+            <div className="mt-4 border-t border-border/40 pt-3">
+              <p className="text-[10px] font-bold tracking-wider uppercase text-text-muted">TOTAL</p>
+              <p className="mt-0.5 text-xs text-text-secondary leading-snug">
+                96 candidate & member sessions logged across 12 trainers this week.
+              </p>
+            </div>
+          </div>
         </div>
 
-        {/* Two-column Layout (Left: Content 8-cols, Right: Rail 4-cols) */}
-        <div className="grid grid-cols-1 gap-6 2xl:grid-cols-12">
-          {/* Left Column (col-span-8) */}
-          <div className="space-y-6 2xl:col-span-8">
-            {/* Revenue and Membership Growth Visualizer */}
-            <Card>
-              <CardHeader>
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                  <div>
-                    <CardTitle>Financial & Membership Trajectory</CardTitle>
-                    <CardDescription>
-                      Performance trends over the last 6 months
-                    </CardDescription>
-                  </div>
-                  <div className="flex items-center gap-1 rounded-lg border border-border bg-surface p-1">
-                    <button
-                      type="button"
-                      onClick={() => setChartView("revenue")}
-                      className={`px-3 py-1 text-xs font-medium rounded-md transition-colors ${
-                        chartView === "revenue"
-                          ? "bg-primary text-primary-foreground shadow-xs"
-                          : "text-text-muted hover:text-text-primary"
-                      }`}
-                    >
-                      Revenue ($)
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setChartView("members")}
-                      className={`px-3 py-1 text-xs font-medium rounded-md transition-colors ${
-                        chartView === "members"
-                          ? "bg-primary text-primary-foreground shadow-xs"
-                          : "text-text-muted hover:text-text-primary"
-                      }`}
-                    >
-                      Active Members
-                    </button>
-                  </div>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <div className="pt-2">
-                  <div className="flex items-baseline justify-between mb-4">
+        {/* Bottom Section: Recent Check-ins and Needs Review */}
+        <div className="grid grid-cols-1 gap-5 lg:grid-cols-12">
+          {/* Left Table: Recent Check-ins (8 cols) */}
+          <div className="rounded-2xl border border-border bg-surface p-5 shadow-xs lg:col-span-8">
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <h3 className="text-sm font-bold text-text-primary">
+                  Recent Facility Check-ins ({attendance.length} of 21)
+                </h3>
+                <p className="text-[11px] text-text-muted">Turnstile badge scans & current gym floor occupancy</p>
+              </div>
+              <Link
+                href="/attendance"
+                className="inline-flex items-center gap-1 text-xs font-bold text-primary hover:underline"
+              >
+                View all logs <ArrowUpRight className="h-3.5 w-3.5" />
+              </Link>
+            </div>
+
+            <div className="divide-y divide-border overflow-x-auto">
+              {attendance.slice(0, 5).map((log) => (
+                <div key={log.id} className="flex items-center justify-between py-2.5">
+                  <div className="flex items-center gap-2.5">
+                    <div className="flex h-7 w-7 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary">
+                      {log.memberName.charAt(0)}
+                    </div>
                     <div>
-                      <span className="text-3xl font-bold tracking-tight text-text-primary">
-                        {chartView === "revenue" ? "$19,450" : "395"}
-                      </span>
-                      <span className="ml-2 text-xs font-medium text-success">
-                        +14.2% Growth
-                      </span>
+                      <p className="text-xs font-bold text-text-primary leading-tight">
+                        {log.memberName}
+                      </p>
+                      <p className="text-[10px] text-text-muted font-mono tabular-nums">
+                        In: {log.checkInTime} • {log.lockerNumber ? `Locker ${log.lockerNumber}` : "No locker"}
+                      </p>
                     </div>
-                    <span className="text-xs text-text-muted">Updated 10 minutes ago</span>
                   </div>
 
-                  {/* Chart Bar Visualization */}
-                  <div className="grid grid-cols-6 gap-2 sm:gap-4 items-end h-52 pt-6 pb-2 border-b border-border/70">
-                    {revenueChartData.map((item, idx) => {
-                      const isMax = idx === revenueChartData.length - 1;
-                      return (
-                        <div key={item.month} className="flex flex-col items-center h-full justify-end group">
-                          <div className="text-[10px] font-semibold font-mono text-text-muted opacity-0 group-hover:opacity-100 transition-opacity mb-1 tabular-nums">
-                            {chartView === "revenue" ? `$${(item.rev / 1000).toFixed(1)}k` : item.members}
-                          </div>
-                          <div
-                            style={{ height: `${item.height}%` }}
-                            className={`w-full max-w-[38px] rounded-t-sm transition-all duration-300 ${
-                              isMax
-                                ? "bg-primary shadow-[inset_0_1px_0_rgba(255,255,255,0.25)] hover:bg-primary-hover"
-                                : "bg-primary/20 hover:bg-primary/35 border-t border-primary/30"
-                            }`}
-                          />
-                          <span className="mt-2 text-xs font-medium text-text-muted">
-                            {item.month}
-                          </span>
-                        </div>
-                      );
-                    })}
-                  </div>
-
-                  <div className="mt-4 flex flex-wrap items-center justify-between text-xs text-text-secondary">
-                    <div className="flex items-center gap-4">
-                      <div className="flex items-center gap-1.5">
-                        <span className="h-2.5 w-2.5 rounded-xs bg-primary" />
-                        <span className="text-[11px] text-text-muted">Current Month Projection</span>
-                      </div>
-                      <div className="flex items-center gap-1.5">
-                        <span className="h-2.5 w-2.5 rounded-xs bg-primary/20 border border-primary/30" />
-                        <span className="text-[11px] text-text-muted">Historical Performance</span>
-                      </div>
-                    </div>
-                    <Link
-                      href="/reports"
-                      className="inline-flex items-center gap-1 text-primary hover:underline font-medium text-xs"
-                    >
-                      Full Reports <ArrowRight className="h-3 w-3" />
-                    </Link>
+                  <div className="flex items-center gap-2">
+                    {log.status === "In Gym" ? (
+                      <>
+                        <Badge variant="success">In Gym</Badge>
+                        <Button
+                          variant="line"
+                          size="sm"
+                          onClick={() => {
+                            checkOutMember(log.id);
+                            showToast({
+                              type: "info",
+                              title: "Checked Out",
+                              message: `${log.memberName} has checked out.`,
+                            });
+                          }}
+                          className="h-6 text-[10px] px-2"
+                        >
+                          Check Out
+                        </Button>
+                      </>
+                    ) : (
+                      <Badge variant="neutral">Completed</Badge>
+                    )}
                   </div>
                 </div>
-              </CardContent>
-            </Card>
-
-            {/* Attendance Summaries & Occupancy Hours */}
-            <Card>
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <div>
-                    <CardTitle>Facility Occupancy & Peak Hours</CardTitle>
-                    <CardDescription>
-                      Hourly floor crowd distribution (Average weekday)
-                    </CardDescription>
-                  </div>
-                  <Badge variant="info">Peak: 6 PM - 8 PM</Badge>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  {[
-                    { slot: "06:00 AM - 09:00 AM (Early Birds)", load: 78, label: "High Volume" },
-                    { slot: "09:00 AM - 12:00 PM (Mid Morning)", load: 45, label: "Moderate" },
-                    { slot: "12:00 PM - 02:00 PM (Lunch Circuit)", load: 60, label: "Active" },
-                    { slot: "02:00 PM - 05:00 PM (Off-Peak Quiet)", load: 28, label: "Low Capacity" },
-                    { slot: "05:00 PM - 08:30 PM (Evening Prime)", load: 92, label: "Near Full (92%)" },
-                    { slot: "08:30 PM - 11:00 PM (Late Night)", load: 35, label: "Light" },
-                  ].map((period) => (
-                    <div key={period.slot} className="space-y-1.5">
-                      <div className="flex justify-between text-xs font-medium">
-                        <span className="text-text-primary">{period.slot}</span>
-                        <span className="text-text-muted tabular-nums text-[11px]">{period.label} ({period.load}%)</span>
-                      </div>
-                      <div className="h-1.5 w-full overflow-hidden rounded-full bg-surface-secondary">
-                        <div
-                          style={{ width: `${period.load}%` }}
-                          className={`h-full rounded-full transition-all ${
-                            period.load > 85
-                              ? "bg-danger"
-                              : period.load > 60
-                              ? "bg-warning"
-                              : "bg-success"
-                          }`}
-                        />
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Live Today's Check-ins */}
-            <Card>
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <div>
-                    <CardTitle>Live Facility Activity Stream</CardTitle>
-                    <CardDescription>
-                      Real-time member scans at the turnstile & gym floor
-                    </CardDescription>
-                  </div>
-                  <Link href="/attendance">
-                    <Button variant="ghost" size="sm">
-                      View All Logs
-                    </Button>
-                  </Link>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <div className="divide-y divide-border">
-                  {attendance.slice(0, 5).map((log) => (
-                    <div key={log.id} className="flex items-center justify-between py-3">
-                      <div className="flex items-center gap-3">
-                        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-xs font-semibold text-primary ring-1 ring-primary/20">
-                          {log.memberName.charAt(0)}
-                        </div>
-                        <div>
-                          <p className="text-xs font-semibold text-text-primary">
-                            {log.memberName}
-                          </p>
-                          <div className="flex items-center gap-2 text-[11px] text-text-muted font-mono tabular-nums">
-                            <Clock className="h-3 w-3" />
-                            <span>In: {log.checkInTime}</span>
-                            {log.checkOutTime && <span>• Out: {log.checkOutTime}</span>}
-                            {log.lockerNumber && <span>• Locker {log.lockerNumber}</span>}
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="flex items-center gap-2">
-                        {log.status === "In Gym" ? (
-                          <>
-                            <Badge variant="success">In Gym</Badge>
-                            <Button
-                              variant="line"
-                              size="sm"
-                              onClick={() => {
-                                checkOutMember(log.id);
-                                showToast({
-                                  type: "info",
-                                  title: "Checked Out",
-                                  message: `${log.memberName} has checked out.`,
-                                });
-                              }}
-                            >
-                              Check Out
-                            </Button>
-                          </>
-                        ) : (
-                          <Badge variant="neutral">Completed</Badge>
-                        )}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
+              ))}
+            </div>
           </div>
 
-          {/* Right Rail Column (col-span-4) */}
-          <div className="space-y-6 2xl:col-span-4">
-            {/* Upcoming Membership Expirations */}
-            <Card>
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <CardTitle>Upcoming Expirations</CardTitle>
-                  <Badge variant="warning">{expiringMembers.length} Expiring</Badge>
-                </div>
-                <CardDescription>
-                  Memberships requiring renewal this month
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                {expiringMembers.length === 0 ? (
-                  <p className="py-4 text-center text-xs text-text-muted">
-                    No active memberships expiring soon.
-                  </p>
-                ) : (
-                  <div className="space-y-2.5">
-                    {expiringMembers.map((m) => (
-                      <div
-                        key={m.id}
-                        className="rounded-lg border border-border/80 bg-surface-secondary/50 p-2.5"
-                      >
-                        <div className="flex items-start justify-between gap-2">
-                          <div>
-                            <p className="text-xs font-semibold text-text-primary">{m.name}</p>
-                            <p className="text-[11px] text-text-muted">{m.planName}</p>
-                            <p className="mt-1 text-[11px] font-mono tabular-nums text-warning">
-                              Expires: {m.expiryDate}
-                            </p>
-                          </div>
-                          <Button
-                            variant="line"
-                            size="sm"
-                            onClick={() => handleRenewMember(m.id)}
-                            className="text-xs h-7 px-2"
-                          >
-                            Renew
-                          </Button>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </CardContent>
-            </Card>
+          {/* Right Card: Needs Review (4 cols) */}
+          <div className="rounded-2xl border border-border bg-surface p-5 shadow-xs lg:col-span-4">
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <h3 className="text-sm font-bold text-text-primary">
+                  Needs Review ({expiringMembers.length} pending)
+                </h3>
+                <p className="text-[11px] text-text-muted">Memberships expiring within 30 days</p>
+              </div>
+              <Link
+                href="/members?filter=expiring"
+                className="inline-flex items-center gap-1 text-xs font-bold text-primary hover:underline"
+              >
+                View all <ArrowUpRight className="h-3.5 w-3.5" />
+              </Link>
+            </div>
 
-            {/* Recent Financial Transactions */}
-            <Card>
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <CardTitle>Recent Payments</CardTitle>
-                  <Link href="/payments" className="text-xs text-primary font-medium hover:underline">
-                    View All
-                  </Link>
-                </div>
-                <CardDescription>Latest membership & personal trainer sales</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-2.5">
-                  {payments.slice(0, 5).map((tx) => (
-                    <div
-                      key={tx.id}
-                      className="flex items-center justify-between border-b border-border/60 pb-2.5 last:border-0 last:pb-0"
-                    >
-                      <div className="min-w-0">
-                        <p className="truncate text-xs font-semibold text-text-primary">
-                          {tx.memberName}
-                        </p>
-                        <p className="truncate text-[11px] text-text-muted">
-                          {tx.planName} • {tx.paymentMethod}
-                        </p>
-                      </div>
-                      <div className="text-right">
-                        <p className="text-xs font-semibold font-mono tabular-nums text-text-primary">
-                          ${tx.amount.toFixed(2)}
-                        </p>
-                        <Badge
-                          variant={
-                            tx.status === "Paid"
-                              ? "success"
-                              : tx.status === "Pending"
-                              ? "warning"
-                              : "danger"
-                          }
-                        >
-                          {tx.status}
-                        </Badge>
-                      </div>
+            <div className="space-y-2.5">
+              {expiringMembers.length === 0 ? (
+                <p className="py-6 text-center text-xs text-text-muted">
+                  All memberships are in good standing.
+                </p>
+              ) : (
+                expiringMembers.slice(0, 3).map((m) => (
+                  <div
+                    key={m.id}
+                    className="flex items-center justify-between rounded-xl bg-surface-secondary/70 p-3 transition-colors hover:bg-surface-secondary"
+                  >
+                    <div>
+                      <p className="text-xs font-bold text-text-primary">{m.name}</p>
+                      <p className="text-[10px] text-text-muted">{m.planName}</p>
+                      <p className="text-[10px] font-mono tabular-nums text-danger mt-0.5">
+                        Expires: {m.expiryDate}
+                      </p>
                     </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Quick AI Insight Assistant Demonstration */}
-            <Card className="border-border/80 bg-surface/40">
-              <CardHeader>
-                <div className="flex items-center gap-2">
-                  <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary/10 text-primary ring-1 ring-primary/20">
-                    <Sparkles className="h-3.5 w-3.5" />
+                    <Button
+                      variant="solid"
+                      size="sm"
+                      onClick={() => handleRenewMember(m.id)}
+                      className="h-7 text-xs px-2.5"
+                    >
+                      Renew
+                    </Button>
                   </div>
-                  <div>
-                    <CardTitle>AI Operations Advisor</CardTitle>
-                    <CardDescription>Real-time predictive telemetry</CardDescription>
-                  </div>
-                </div>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <div className="rounded-lg border border-border/80 bg-background/80 p-3 text-xs leading-relaxed text-text-secondary">
-                  <p className="font-semibold text-text-primary mb-1">
-                    Recommendation for Tonight:
-                  </p>
-                  Peak evening occupancy is trending at 92%. Scheduling an additional instructor
-                  on the Iron Arena turf will reduce equipment wait time by ~24%.
-                </div>
-                <Link href="/ai-assistant">
-                  <Button variant="subtle" size="sm" block className="gap-2">
-                    Open AI Demonstration <ArrowRight className="h-3 w-3" />
-                  </Button>
-                </Link>
-              </CardContent>
-            </Card>
+                ))
+              )}
+            </div>
           </div>
         </div>
       </div>
@@ -799,7 +768,7 @@ export function DashboardView() {
             />
           </FormField>
 
-          <div className="flex justify-end gap-2 pt-2 border-t border-border">
+          <div className="flex justify-end gap-2 pt-3">
             <Button variant="ghost" type="button" onClick={() => setAddMemberModalOpen(false)}>
               Cancel
             </Button>

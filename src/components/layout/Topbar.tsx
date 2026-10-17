@@ -83,54 +83,61 @@ export function Topbar() {
 
   return (
     <>
-      <header className="sticky top-0 z-30 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
+      <header className="sticky top-0 z-30 border-b border-shell-border bg-shell-bg text-slate-200">
         <div className="flex h-14 items-center justify-between gap-3 px-4 sm:px-6">
-          {/* Left section: mobile hamburger & quick search bar */}
-          <div className="flex items-center gap-2.5">
+          {/* Left section: mobile hamburger & breadcrumb & pill search bar */}
+          <div className="flex items-center gap-3 lg:gap-4 min-w-0">
             <button
               type="button"
               onClick={() => setMobileMenuOpen(true)}
-              className="inline-flex h-8.5 w-8.5 items-center justify-center rounded-lg border border-border bg-surface text-text-secondary hover:text-text-primary md:hidden"
+              className="inline-flex h-8.5 w-8.5 items-center justify-center rounded-lg bg-slate-900/80 text-slate-300 hover:text-white md:hidden"
               aria-label="Open Navigation"
             >
               <Menu className="h-4 w-4" />
             </button>
 
+            {/* Breadcrumbs matching screenshot */}
+            <div className="hidden sm:flex items-center gap-1.5 text-xs">
+              <span className="font-semibold text-slate-400 hover:text-slate-200 transition-colors cursor-pointer">
+                Apex Gym
+              </span>
+              <span className="text-slate-600 font-bold">&gt;</span>
+              <span className="font-bold text-white tracking-tight">Dashboard</span>
+            </div>
+
+            {/* Pill Search bar matching screenshot */}
             <button
               type="button"
               onClick={() => setSearchOpen(true)}
-              className="hidden sm:flex items-center gap-2.5 rounded-lg border border-border/80 bg-surface/80 px-2.5 py-1.5 text-xs text-text-muted transition-all hover:border-border-strong hover:bg-surface hover:text-text-primary w-60 lg:w-72"
+              className="flex items-center gap-2.5 rounded-full bg-slate-900/80 px-3.5 py-1.5 text-xs text-slate-400 transition-all hover:bg-slate-900 hover:text-slate-200 w-52 sm:w-64 lg:w-72"
             >
-              <Search className="h-3.5 w-3.5" />
-              <span className="flex-1 text-left tracking-tight">Search gym registry...</span>
-              <kbd className="rounded border border-border bg-background px-1.5 py-0.5 text-[10px] font-mono text-text-muted">
+              <Search className="h-3.5 w-3.5 text-slate-400 shrink-0" />
+              <span className="flex-1 text-left truncate">Search members, check-ins...</span>
+              <kbd className="hidden sm:inline-block rounded bg-slate-800 px-1.5 py-0.5 text-[10px] font-mono text-slate-400">
                 ⌘K
               </kbd>
             </button>
           </div>
 
           {/* Right section */}
-          <div className="flex items-center gap-1.5 sm:gap-2">
-            {/* Quick action search icon (mobile) */}
-            <button
-              type="button"
-              onClick={() => setSearchOpen(true)}
-              className="flex h-8.5 w-8.5 items-center justify-center rounded-lg border border-border bg-background text-text-secondary hover:bg-surface sm:hidden"
-              aria-label="Search"
-            >
-              <Search className="h-4 w-4" />
-            </button>
+          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+            {/* Live date timestamp matching screenshot */}
+            <div className="hidden lg:flex items-center gap-1 text-xs font-medium text-slate-400 pr-1">
+              <span>17 Oct 2026, 21:58 IST</span>
+            </div>
 
-            {/* Notifications */}
+            {/* Notifications with red indicator */}
             <Link
               href="/notifications"
-              className="relative inline-flex h-8.5 w-8.5 items-center justify-center rounded-lg border border-border/80 bg-background text-text-secondary transition-all hover:border-border-strong hover:bg-surface hover:text-text-primary"
+              className="relative inline-flex h-8.5 w-8.5 items-center justify-center rounded-lg bg-slate-900/60 text-slate-300 transition-all hover:bg-slate-800 hover:text-white"
               aria-label="Notifications"
               title="Notifications"
             >
               <Bell className="h-3.5 w-3.5" />
               {unreadCount > 0 && (
-                <span className="absolute right-1.5 top-1.5 h-1.5 w-1.5 rounded-full bg-primary ring-2 ring-background" />
+                <span className="absolute -top-1 -right-1 flex h-4 min-w-[16px] items-center justify-center rounded-full bg-danger px-1 text-[9px] font-bold text-white shadow-xs">
+                  {unreadCount}
+                </span>
               )}
             </Link>
 
@@ -138,31 +145,28 @@ export function Topbar() {
             <ThemeToggle />
 
             {/* Subtle Divider */}
-            <div className="mx-1 hidden h-5 w-px bg-border/70 sm:block" />
+            <div className="mx-0.5 hidden h-5 w-px bg-slate-800 sm:block" />
 
             {/* Profile dropdown */}
             <DropdownMenu
               trigger={
                 <button
                   type="button"
-                  className="group flex items-center gap-2 rounded-lg border border-border/80 bg-background px-2 py-1 shadow-2xs transition-all hover:border-border-strong hover:bg-surface"
+                  className="group flex items-center gap-2 rounded-full bg-slate-900/70 pl-1 pr-2.5 py-1 transition-all hover:bg-slate-800"
                 >
-                  {/* Avatar */}
-                  <div className="flex h-7 w-7 items-center justify-center rounded-md bg-primary/10 text-xs font-semibold text-primary ring-1 ring-primary/20">
+                  {/* Avatar Circle */}
+                  <div className="flex h-7 w-7 items-center justify-center rounded-full bg-primary text-xs font-bold text-white shadow-xs">
                     {initial}
                   </div>
 
                   {/* User meta */}
                   <div className="hidden min-w-0 text-left sm:block">
-                    <p className="truncate text-xs font-semibold text-text-primary leading-tight">
+                    <p className="truncate text-xs font-bold text-white leading-tight">
                       {displayName}
-                    </p>
-                    <p className="truncate text-[10px] text-text-muted leading-tight">
-                      {roleLabel}
                     </p>
                   </div>
 
-                  <ChevronDown className="h-3.5 w-3.5 shrink-0 text-text-muted transition-transform group-hover:translate-y-[1px]" />
+                  <ChevronDown className="h-3 w-3 shrink-0 text-slate-400 transition-transform group-hover:translate-y-[1px]" />
                 </button>
               }
             >
